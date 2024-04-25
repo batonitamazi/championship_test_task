@@ -1,11 +1,17 @@
+using Microsoft.Data.SqlClient;
+using System.Data;
+using Upgaming_test_task.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IDbConnection>(provider => new SqlConnection("Server=localhost;Database=ChampionShip;Integrated Security=True; TrustServerCertificate=True;"));
 
 var app = builder.Build();
 
