@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Upgaming_test_task.NewFolder;
 using Upgaming_test_task.Repositories;
 using Upgaming_test_task.ViewModels;
 
@@ -8,34 +9,32 @@ namespace Upgaming_test_task.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository userRepository;
-        public UserController(IUserRepository userRepository)
+        private readonly IUserService userService;
+        public UserController(IUserService userService)
         {
-            this.userRepository = userRepository;
-        }
-
-        [HttpPost("UploadUserScores")]
-        public IActionResult UploadUserScores([FromBody] List<UserScoreViewModel> scores)
-        {
-            return Ok();
-        }
-
-        [HttpGet("GetAllUsers")]
-        public IActionResult GetAllusers()
-        {
-            return Ok(userRepository.GetAllUsers());
+            this.userService = userService;
         }
 
         [HttpPost("UploadUserData")]
-        public IActionResult UploadUserData([FromBody] List<UserViewModel> usersData)
+        public async Task<IActionResult> UploadUserScores([FromBody] List<UserViewModel> users)
         {
-            return Ok();
+            var result = await userService.UploadUserData(users);
+            return Ok(result);
         }
-        [HttpGet("GetUserInfo/{userId}")]
-        public IActionResult GetUserInfo(int userId)
+        [HttpPost("UploadUserScores")]
+        public async Task<IActionResult> UploadUserScores([FromBody] List<UserScoreViewModel> scores)
         {
-            UserViewModel archasda = new UserViewModel() { Name = "Tazo", Surname = "mirianashvili", UserName = "BatoniTamazi" };
-            return Ok(archasda);
+            var result = await userService.UploadUserScores(scores);
+            return Ok(result);
+        }
+
+
+
+        [HttpGet("GetAllUsers")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await userService.GetAllUsers();
+            return Ok(users);
         }
     }
 }

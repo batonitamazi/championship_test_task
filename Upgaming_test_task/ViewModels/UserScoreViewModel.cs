@@ -8,7 +8,7 @@ namespace Upgaming_test_task.ViewModels
         public int UserId { get; set; }
 
         [JsonPropertyName("date")]
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
 
         [JsonPropertyName("score")]
         public int Score { get; set; }
