@@ -1,4 +1,5 @@
-﻿using Upgaming_test_task.Models;
+﻿using System.Globalization;
+using Upgaming_test_task.Models;
 
 namespace Upgaming_test_task.Helpers
 {
@@ -6,38 +7,29 @@ namespace Upgaming_test_task.Helpers
     {
         public static double AverageDailyScoreCalc(List<UserScore> scores)
         {
-            DateTime today = DateTime.Today;
-            var scoresByDay = scores.GroupBy(s => s.Date.Date).ToList();
-            double averageDaily = scoresByDay.Where(g => g.Key == today).SelectMany(g => g.Select(s => s.Score)).Average();
-
-            return averageDaily;
-
+            var groupedScores = scores.GroupBy(s => s.Date.Date);
+            return groupedScores.Average(g => g.Sum(s => s.Score));
         }
 
         public static double AverageMonthlyScore(List<UserScore> scores)
         {
-            DateTime today = DateTime.Today;
-            DateTime currentMonth = new DateTime(today.Year, today.Month, 1);
-            var scoresByMonth = scores.GroupBy(s => new { s.Date.Year, s.Date.Month });
-
-            double averageMonthly = scoresByMonth.Where(g => g.Key.Year == currentMonth.Year && g.Key.Month == currentMonth.Month).SelectMany(g => g.Select(s => s.Score)).Average();
-            return averageMonthly;
+            var groupedScores = scores.GroupBy(s => new { s.Date.Year, s.Date.Month });
+            return groupedScores.Average(g => g.Sum(s => s.Score));
         }
         public static int MaximumDailyScore(List<UserScore> scores)
         {
-            DateTime today = DateTime.Today;
-            var scoresByDay = scores.GroupBy(s => s.Date.Date).ToList();
-            int maxDaily = scoresByDay.Where(g => g.Key == today).SelectMany(g => g.Select(s => s.Score)).Max();
+            return scores.Max(s => s.Score);
 
-            return maxDaily;
+        }
+        public static int MaximumWeeklyScore(List<UserScore> scoresList)
+        {
+            var groupedScores = scoresList.GroupBy(s => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(s.Date, CalendarWeekRule.FirstDay, DayOfWeek.Sunday));
+            return groupedScores.Max(g => g.Sum(s => s.Score));
         }
         public static int MaximumMonthlyScore(List<UserScore> scores)
         {
-            DateTime today = DateTime.Today;
-            DateTime currentMonth = new DateTime(today.Year, today.Month, 1);
-            var scoresByMonth = scores.GroupBy(s => new { s.Date.Year, s.Date.Month });
-            int maxMonthly = scoresByMonth.Where(g => g.Key.Year == currentMonth.Year && g.Key.Month == currentMonth.Month).SelectMany(g => g.Select(s => s.Score)).Max();
-            return maxMonthly;
+            var groupedScoresByMonth = scores.GroupBy(s => new { s.Date.Year, s.Date.Month });
+            return groupedScoresByMonth.Max(g => g.Sum(s => s.Score));
 
         }
     }

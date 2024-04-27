@@ -42,7 +42,7 @@ namespace Upgaming_test_task.Services
                     AverageMonthlyScore = ScoreServiceHelper.AverageMonthlyScore(scoresList),
                     MaximumDailyScore = ScoreServiceHelper.MaximumDailyScore(scoresList),
                     MaximumMonthlyScore = ScoreServiceHelper.MaximumMonthlyScore(scoresList),
-                    MaximumWeeklyScore = 0,
+                    MaximumWeeklyScore = ScoreServiceHelper.MaximumWeeklyScore(scoresList),
                 };
                 return result;
             }

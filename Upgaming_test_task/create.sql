@@ -26,7 +26,7 @@ BEGIN
         user_id INT NOT NULL,
         date DATETIME NOT NULL,
         score INT,
-        FOREIGN KEY (user_id) REFERENCES users(id)
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
 END
 GO
