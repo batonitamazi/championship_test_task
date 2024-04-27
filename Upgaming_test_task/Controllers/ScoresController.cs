@@ -17,6 +17,10 @@ namespace Upgaming_test_task.Controllers
         public async Task<IActionResult> GetScoresByDay(DateTime date)
         {
             var result = await scoreService.GetScoresByDay(date);
+            if(result.Count < 1)
+            {
+                return NotFound();
+            }
             return Ok(result);
         }
 
@@ -25,6 +29,10 @@ namespace Upgaming_test_task.Controllers
         public async Task<IActionResult> GetScoresByMonth(DateTime month)
         {
             var result = await scoreService.GetScoresByMonth(month);
+            if (result.Count < 1)
+            {
+                return NotFound();
+            }
             return Ok(result);
         }
 
@@ -32,13 +40,22 @@ namespace Upgaming_test_task.Controllers
         public async Task<IActionResult> GetStats()
         {
             var result = await scoreService.GetStats();
-            return Ok(result);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound();
+
         }
 
         [HttpGet("GetAllData")]
         public async Task<IActionResult> GetAllData()
         {
             var result = await scoreService.GetAllData();
+            if (result.Count < 1)
+            {
+                return NotFound();
+            }
             return Ok(result);
         }
     }
