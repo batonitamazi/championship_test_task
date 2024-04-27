@@ -7,6 +7,7 @@ namespace Upgaming_test_task.NewFolder
         Task<List<ResultStatusViewModel>> UploadUserData(List<UserViewModel> users);
         Task<List<UserViewModel>> GetAllUsers();
         Task<List<ResultStatusViewModel>> UploadUserScores(List<UserScoreViewModel> users);
+        Task<UserRatingViewModel> GetUserInfo(int user_id);
 
 
     }

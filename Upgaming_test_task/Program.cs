@@ -2,6 +2,7 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using Upgaming_test_task.NewFolder;
 using Upgaming_test_task.Repositories;
+using Upgaming_test_task.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +12,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IScoreService, ScoreService>();
+builder.Services.AddScoped<IScoreRepository, ScoreRepository>();
 builder.Services.AddTransient<IDbConnection>(provider => new SqlConnection("Server=localhost;Database=ChampionShip;Integrated Security=True; TrustServerCertificate=True;"));
 
 var app = builder.Build();

@@ -36,5 +36,16 @@ namespace Upgaming_test_task.Controllers
             var users = await userService.GetAllUsers();
             return Ok(users);
         }
+
+        [HttpGet("GetUserInfo/{user_id}")]
+        public async Task<IActionResult> GetUserInfo(int user_id)
+        {
+            if(user_id == 0)
+            {
+                return NotFound();
+            }
+            var result = await userService.GetUserInfo(user_id);
+            return Ok(result);
+        }
     }
 }

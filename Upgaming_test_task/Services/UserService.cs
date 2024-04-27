@@ -69,5 +69,25 @@ namespace Upgaming_test_task.NewFolder
             return result;
         }
 
+        public async Task<UserRatingViewModel> GetUserInfo(int user_id)
+        {
+            List<UserRating> usersInfo = await userRepository.GetUsersInfo();
+
+            var userInfo = usersInfo.FirstOrDefault(k => k.UserId == user_id);
+            if(userInfo != null)
+                return new UserRatingViewModel { Rating = CalculateUserRating(userInfo, usersInfo), UserName = userInfo.UserName, Score = userInfo.Score };
+            return new UserRatingViewModel { };
+        }
+
+        private int CalculateUserRating(UserRating userRating, List<UserRating> allUserRatings)
+        {
+            int userScore = userRating.Score;
+
+            int higherUserScoresCount = allUserRatings.Count(u => u.Score > userScore);
+
+            int rating = higherUserScoresCount + 1;
+
+            return rating;
+        }
     }
 }

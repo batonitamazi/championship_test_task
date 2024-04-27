@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Upgaming_test_task.Services;
 
 namespace Upgaming_test_task.Controllers
 {
@@ -6,28 +7,39 @@ namespace Upgaming_test_task.Controllers
     [ApiController]
     public class ScoresController : ControllerBase
     {
-        [HttpGet("GetScoresByDay/{date}")]
-        public IActionResult GetScoresByDay(DateTime date)
+        public readonly IScoreService scoreService;
+        public ScoresController(IScoreService scoreService)
         {
-            return Ok();
+            this.scoreService = scoreService;
         }
 
-        [HttpGet("GetScoresByMonth/{month}")]
-        public IActionResult GetScoresByMonth(int month)
+        [HttpGet("GetScoresByDay/{date}")]
+        public async Task<IActionResult> GetScoresByDay(DateTime date)
         {
-            return Ok();
+            var result = await scoreService.GetScoresByDay(date);
+            return Ok(result);
+        }
+
+
+        [HttpGet("GetScoresByMonth/{month}")]
+        public async Task<IActionResult> GetScoresByMonth(DateTime month)
+        {
+            var result = await scoreService.GetScoresByMonth(month);
+            return Ok(result);
         }
 
         [HttpGet("GetStats")]
-        public IActionResult GetStats()
+        public async Task<IActionResult> GetStats()
         {
-            return Ok();
+            var result = await scoreService.GetStats();
+            return Ok(result);
         }
 
         [HttpGet("GetAllData")]
-        public IActionResult GetAllData()
+        public async Task<IActionResult> GetAllData()
         {
-            return Ok();
+            var result = await scoreService.GetAllData();
+            return Ok(result);
         }
     }
 }

@@ -11,5 +11,6 @@ namespace Upgaming_test_task.Repositories
         Task<List<User>> GetAllUsers();
         Task AddUserScore(UserScore userScore);
         Task<bool> CheckUserExist(int id);
+        Task<List<UserRating>> GetUsersInfo();
     }
 }

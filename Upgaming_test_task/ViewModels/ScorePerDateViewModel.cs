@@ -2,7 +2,7 @@
 
 namespace Upgaming_test_task.ViewModels
 {
-    public class ScoresPerDateViewModel
+    public class ScorePerDateViewModel
     {
         [JsonPropertyName("user_id")]
         public int UserId { get; set; }
