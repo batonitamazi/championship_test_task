@@ -2,7 +2,7 @@
 
 namespace Upgaming_test_task.ViewModels
 {
-    public class ResultStatusViewModel
+    public class ResultModel
     {
         [JsonPropertyName("status")]
         public string Status { get; set; }

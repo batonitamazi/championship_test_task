@@ -12,9 +12,9 @@ namespace Upgaming_test_task.NewFolder
             this.userRepository = userRepository;
         }
 
-        public async Task<List<ResultStatusViewModel>> UploadUserData(List<UserViewModel> users)
+        public async Task<List<ResultModel>> UploadUserData(List<UserViewModel> users)
         {
-            List<ResultStatusViewModel> response = new List<ResultStatusViewModel>();
+            List<ResultModel> response = new List<ResultModel>();
 
             var uniqueUsernames = await userRepository.GetUniqueUsernames(users.Select(u => u.UserName.ToLower()).ToList());
 
@@ -31,20 +31,20 @@ namespace Upgaming_test_task.NewFolder
             {
                 if (uniqueUsernames.Contains(user.UserName.ToLower()))
                 {
-                    response.Add(new ResultStatusViewModel { Message = $"UserName-{user.UserName} already exists", Added = false, Status = "Not Added" });
+                    response.Add(new ResultModel { Message = $"UserName-{user.UserName} already exists", Added = false, Status = "Not Added" });
                 }
                 else
                 {
-                    response.Add(new ResultStatusViewModel { Message = $"Successfully added user with username-{user.UserName}", Added = true, Status = "Added" });
+                    response.Add(new ResultModel { Message = $"Successfully added user with username-{user.UserName}", Added = true, Status = "Added" });
                 }
             }
 
             return response;
         }
 
-        public async Task<List<ResultStatusViewModel>> UploadUserScores(List<UserScoreViewModel> scores)
+        public async Task<List<ResultModel>> UploadUserScores(List<UserScoreViewModel> scores)
         {
-            List<ResultStatusViewModel> response = new List<ResultStatusViewModel>();
+            List<ResultModel> response = new List<ResultModel>();
 
             var uniqueUsers = await userRepository.CheckUsersExist(scores.Select(k => k.UserId).ToList());
 
@@ -60,11 +60,11 @@ namespace Upgaming_test_task.NewFolder
             {
                 if (!uniqueUsers.Contains(userScore.UserId))
                 {
-                    response.Add(new ResultStatusViewModel { Message = $"user with that UserId not exist - {userScore.UserId}", Added = false, Status = "Not Added" });
+                    response.Add(new ResultModel { Message = $"user with that UserId not exist - {userScore.UserId}", Added = false, Status = "Not Added" });
                 }
                 else
                 {
-                    response.Add(new ResultStatusViewModel { Message = $"successfully added Score with id-{userScore.UserId} and date {userScore.Date}", Added = true, Status = "Added" });
+                    response.Add(new ResultModel { Message = $"successfully added Score with id-{userScore.UserId} and date {userScore.Date}", Added = true, Status = "Added" });
 
                 }
             }

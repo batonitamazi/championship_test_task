@@ -21,7 +21,7 @@ namespace Upgaming_test_task.Controllers
         {
             if(users.Count  <1 )
             {
-             return NotFound("users list is empty")   
+                return NotFound("users list is empty");   
             }
             var result = await userService.UploadUserData(users);
             return Ok(result);
