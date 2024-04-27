@@ -6,11 +6,12 @@ namespace Upgaming_test_task.Repositories
 {
     public interface IUserRepository
     {
-        Task<bool> IsUsernameUnique(string username);
-        Task AddUser(User user);
         Task<List<User>> GetAllUsers();
-        Task AddUserScore(UserScore userScore);
-        Task<bool> CheckUserExist(int id);
         Task<List<UserRating>> GetUsersInfo();
+        Task<List<string>> GetUniqueUsernames(List<string> usernames);
+        Task AddUsers(List<User> users);
+        Task<List<int>> CheckUsersExist(List<int> userIds);
+        Task AddUserScores(List<UserScore> userScore);
+
     }
 }

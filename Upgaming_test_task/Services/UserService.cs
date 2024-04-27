@@ -16,25 +16,29 @@ namespace Upgaming_test_task.NewFolder
         {
             List<ResultStatusViewModel> response = new List<ResultStatusViewModel>();
 
+            var uniqueUsernames = await userRepository.GetUniqueUsernames(users.Select(u => u.UserName.ToLower()).ToList());
+
+            var usersToAdd = users.Where(u => !uniqueUsernames.Contains(u.UserName.ToLower())).Select(u => new User
+            {
+                Name = u.Name,
+                Surname = u.Surname,
+                UserName = u.UserName
+            }).ToList();
+
+            await userRepository.AddUsers(usersToAdd);
+
             foreach (var user in users)
             {
-                if (await userRepository.IsUsernameUnique(user.UserName))
+                if (uniqueUsernames.Contains(user.UserName.ToLower()))
                 {
-                    var userModel = new User
-                    {
-                        Name = user.Name,
-                        Surname = user.Surname,
-                        UserName = user.UserName,
-                    };
-                    await userRepository.AddUser(userModel);
-                    response.Add(new ResultStatusViewModel { Error = $"Successfully added user with username-{user.UserName}", Added = true, Status = "Added" });
-
+                    response.Add(new ResultStatusViewModel { Message = $"UserName-{user.UserName} already exists", Added = false, Status = "Not Added" });
                 }
                 else
                 {
-                    response.Add(new ResultStatusViewModel { Error = $"UserName-{user.UserName} already exists", Added = false, Status = "Not Added" });
+                    response.Add(new ResultStatusViewModel { Message = $"Successfully added user with username-{user.UserName}", Added = true, Status = "Added" });
                 }
             }
+
             return response;
         }
 
@@ -42,22 +46,26 @@ namespace Upgaming_test_task.NewFolder
         {
             List<ResultStatusViewModel> response = new List<ResultStatusViewModel>();
 
-            foreach (var score in scores)
+            var uniqueUsers = await userRepository.CheckUsersExist(scores.Select(k => k.UserId).ToList());
+
+            var userScores = scores.Where(u => uniqueUsers.Contains(u.UserId)).Select(u => new UserScore
             {
-                if(!await userRepository.CheckUserExist(score.UserId))
+                Date = u.Date,
+                UserId = u.UserId,
+                Score = u.Score
+            }).ToList();
+            await userRepository.AddUserScores(userScores);
+
+            foreach (var userScore in scores)
+            {
+                if (!uniqueUsers.Contains(userScore.UserId))
                 {
-                    response.Add(new ResultStatusViewModel { Error = $"user with that UserId not exist - {score.UserId}", Added = false, Status = "Not Added" });
+                    response.Add(new ResultStatusViewModel { Message = $"user with that UserId not exist - {userScore.UserId}", Added = false, Status = "Not Added" });
                 }
                 else
                 {
-                    UserScore userScore = new UserScore
-                    {
-                        UserId = score.UserId,
-                        Date = score.Date,
-                        Score = score.Score,
-                    };
-                    await userRepository.AddUserScore(userScore);
-                    response.Add(new ResultStatusViewModel { Error = $"successfully added user Score with id-{score.UserId} and date {score.Date}", Added = true, Status = "Added" });
+                    response.Add(new ResultStatusViewModel { Message = $"successfully added Score with id-{userScore.UserId} and date {userScore.Date}", Added = true, Status = "Added" });
+
                 }
             }
             return response;
@@ -74,7 +82,7 @@ namespace Upgaming_test_task.NewFolder
             List<UserRating> usersInfo = await userRepository.GetUsersInfo();
 
             var userInfo = usersInfo.FirstOrDefault(k => k.UserId == user_id);
-            if(userInfo != null)
+            if (userInfo != null)
                 return new UserRatingViewModel { Rating = CalculateUserRating(userInfo, usersInfo), UserName = userInfo.UserName, Score = userInfo.Score };
             return new UserRatingViewModel { };
         }

@@ -10,8 +10,8 @@ namespace Upgaming_test_task.ViewModels
         [JsonPropertyName("added")]
         public bool Added { get; set; }
 
-        [JsonPropertyName("error")]
-        public string Error { get; set; }
+        [JsonPropertyName("message")]
+        public string Message { get; set; }
     }
 }
 

@@ -35,18 +35,6 @@ namespace Upgaming_test_task.Repositories
             var usersList = rows.ToList();
             return usersList;
         }
-        public async Task AddUserScore(UserScore userScore)
-        {
-            string query = @"INSERT INTO user_scores (user_id, date, score) 
-                         VALUES (@UserId, @Date, @Score)";
-            await _dbConnection.ExecuteAsync(query, userScore);
-        }
-        public async Task<bool> CheckUserExist(int userId)
-        {
-            string query = "SELECT COUNT(*) FROM users WHERE id = @UserId";
-            int count = await _dbConnection.ExecuteScalarAsync<int>(query, new { UserId = userId });
-            return count > 0;
-        }
         public async Task<List<UserRating>> GetUsersInfo()
         {
             var sql = @"
@@ -60,6 +48,32 @@ namespace Upgaming_test_task.Repositories
             var usersInfo = await _dbConnection.QueryAsync<UserRating>(sql);
             return usersInfo.ToList();
         }
+        public async Task<List<string>> GetUniqueUsernames(List<string> usernames)
+        {
+            string query = "SELECT LOWER(username) FROM users WHERE LOWER(username) IN @Usernames";
+            var users = await _dbConnection.QueryAsync<string>(query, new { Usernames = usernames });
+            return users.ToList();
+        }
+        public async Task AddUsers(List<User> users)
+        {
+            string query = @"INSERT INTO users (name, surname, username) VALUES (@Name, @Surname, @UserName)";
+            await _dbConnection.ExecuteAsync(query, users);
+        }
+
+        public async Task<List<int>> CheckUsersExist(List<int> userIds)
+        {
+            string query = "SELECT id FROM users WHERE id IN @Ids";
+            var existingUserIds = await _dbConnection.QueryAsync<int>(query, new { Ids = userIds });
+            return existingUserIds.ToList();
+        }
+        public async Task AddUserScores(List<UserScore> userScores)
+        {
+            string query = @"INSERT INTO user_scores (user_id, date, score) 
+                         VALUES (@UserId, @Date, @Score)";
+            await _dbConnection.ExecuteAsync(query, userScores);
+        }
+
+
     }
 }
      
